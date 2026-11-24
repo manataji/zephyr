@@ -74,3 +74,7 @@
 	phy-connection-type = "rgmii";
 	status = "okay";
 };
+
+zephyr_udc0: &usb3 {
+	status = "okay";
+};

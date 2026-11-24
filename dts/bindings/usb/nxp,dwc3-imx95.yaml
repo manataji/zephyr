@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+    NXP i.MX95 quirk module for the Synopsys DWC3 controller (device mode)
+
+compatible: "nxp,dwc3-imx95"
+
+include: snps,dwc3.yaml
+
+properties:
+  reg-names:
+    required: true
+    description: |
+      Must name the register blocks, in the order of "reg":
+        "base"   - DWC3 core            (0x4C100000)
+        "glue"   - USB3 GLUE registers  (0x4C1F0000)
+        "tca"    - USB3 PHY TCA         (0x4C1FC000)
+        "blkctl" - HSIOMIX BLK_CTRL     (0x4C010000)
+
+  clocks:
+    required: false
+
+  clock-names:
+    required: false
+    description: |
+      Expected names (as in the Linux imx95.dtsi DWC3 core node):
+        "hsio"    - IMX95_CLK_HSIO (bus_early)
+        "ref"     - IMX95_CLK_24M
+        "suspend" - IMX95_CLK_32K
+
+  nxp,force-vbus-valid:
+    type: boolean
+    description: |
+      Force the PHY's system VBUS-valid input high (PHY_CTRL1[28] with
+      PHY_CTRL2[22:21] = 11b). Useful for bring-up when VBUS detection is
+      not yet wired up; it enables the D+ pull-up regardless of the cable.
+
+  nxp,typec-flipped:
+    type: boolean
+    description: |
+      Program TCA_TCPC with the "flipped" connector orientation. Only affects
+      the SuperSpeed lanes; high-speed D+/D- are orientation independent.
